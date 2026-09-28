@@ -42,7 +42,7 @@ export default function Contact() {
           <div className="lg:col-span-5 space-y-8">
             <div className="space-y-6">
               {/* Email */}
-              <div className="flex items-start gap-4 p-5 rounded-2xl bg-white/[0.02] border border-white/10">
+              <div className="flex items-start gap-4 p-5 rounded-2xl bg-white/[0.02] border border-white/10 hover:border-[#38bdf8]/30 transition-all">
                 <div className="w-10 h-10 rounded-xl bg-[#38bdf8]/10 text-[#38bdf8] flex items-center justify-center shrink-0">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -50,14 +50,14 @@ export default function Contact() {
                 </div>
                 <div>
                   <span className="text-xs font-mono text-gray-400 uppercase tracking-wider block">Email Inquiries</span>
-                  <a href="mailto:saptarshi.mondal@example.com" className="text-base font-semibold text-white hover:text-[#38bdf8] transition-colors mt-0.5 block">
-                    saptarshi.mondal@example.com
+                  <a href="mailto:saptarshimondal1002@gmail.com" className="text-base font-semibold text-white hover:text-[#38bdf8] transition-colors mt-0.5 block">
+                    saptarshimondal1002@gmail.com
                   </a>
                 </div>
               </div>
 
               {/* Location */}
-              <div className="flex items-start gap-4 p-5 rounded-2xl bg-white/[0.02] border border-white/10">
+              <div className="flex items-start gap-4 p-5 rounded-2xl bg-white/[0.02] border border-white/10 hover:border-[#38bdf8]/30 transition-all">
                 <div className="w-10 h-10 rounded-xl bg-[#38bdf8]/10 text-[#38bdf8] flex items-center justify-center shrink-0">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -65,24 +65,30 @@ export default function Contact() {
                   </svg>
                 </div>
                 <div>
-                  <span className="text-xs font-mono text-gray-400 uppercase tracking-wider block">Location & Travel</span>
+                  <span className="text-xs font-mono text-gray-400 uppercase tracking-wider block">Location</span>
                   <p className="text-base font-semibold text-white mt-0.5">
-                    Mumbai & Global Available
+                    Thakurpukur, Kolkata, West Bengal
                   </p>
                 </div>
               </div>
 
               {/* Social Channels */}
               <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/10 space-y-3">
-                <span className="text-xs font-mono text-gray-400 uppercase tracking-wider block">Direct Networks</span>
-                <div className="flex items-center gap-3">
-                  {['GitHub', 'LinkedIn', 'Instagram', 'Behance'].map((net) => (
+                <span className="text-xs font-mono text-gray-400 uppercase tracking-wider block">Professional Profiles</span>
+                <div className="flex flex-wrap items-center gap-2.5">
+                  {[
+                    { label: 'GitHub', href: 'https://github.com/EElectriX' },
+                    { label: 'LeetCode', href: 'https://leetcode.com/u/ElectriX/' },
+                    { label: 'LinkedIn', href: 'https://linkedin.com' },
+                  ].map((net) => (
                     <a
-                      key={net}
-                      href={`#${net.toLowerCase()}`}
-                      className="text-xs px-3.5 py-1.5 rounded-full bg-white/5 border border-white/5 text-gray-300 hover:text-white hover:border-[#38bdf8]/40 hover:bg-[#38bdf8]/10 transition-all"
+                      key={net.label}
+                      href={net.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-xs px-4 py-2 rounded-full bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:border-[#38bdf8]/40 hover:bg-[#38bdf8]/10 transition-all font-mono"
                     >
-                      {net}
+                      {net.label} ↗
                     </a>
                   ))}
                 </div>

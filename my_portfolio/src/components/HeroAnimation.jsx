@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { animate, onScroll, mapRange } from 'animejs';
 import { AboutContent } from './About';
 import { EducationContent } from './Education';
 import Kolkataweather from "./Kolkataweather";
@@ -22,6 +21,13 @@ const P = {
   eduEnterEnd: 1.00,
 };
 
+// Typewriter cycling words: Engineer (green), Freelancer (white), Developer (sky blue)
+const TYPEWRITER_WORDS = [
+  { text: 'Engineer', color: 'text-[#22c55e]', article: 'an' },
+  { text: 'Freelancer', color: 'text-white', article: 'a' },
+  { text: 'Developer', color: 'text-[#38bdf8]', article: 'a' },
+];
+
 export default function HeroAnimation() {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
@@ -41,6 +47,40 @@ export default function HeroAnimation() {
     return () => clearInterval(timer);
   }, []);
 
+  const [wordIndex, setWordIndex] = useState(0);
+  const [displayText, setDisplayText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    const currentWord = TYPEWRITER_WORDS[wordIndex].text;
+    let timer;
+
+    if (!isDeleting) {
+      if (displayText.length < currentWord.length) {
+        timer = setTimeout(() => {
+          setDisplayText(currentWord.slice(0, displayText.length + 1));
+        }, 110);
+      } else {
+        timer = setTimeout(() => {
+          setIsDeleting(true);
+        }, 1800);
+      }
+    } else {
+      if (displayText.length > 0) {
+        timer = setTimeout(() => {
+          setDisplayText(currentWord.slice(0, displayText.length - 1));
+        }, 55);
+      } else {
+        timer = setTimeout(() => {
+          setIsDeleting(false);
+          setWordIndex((prev) => (prev + 1) % TYPEWRITER_WORDS.length);
+        }, 300);
+      }
+    }
+
+    return () => clearTimeout(timer);
+  }, [displayText, isDeleting, wordIndex]);
+
   const formatTime = (d) =>
     `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
 
@@ -49,8 +89,21 @@ export default function HeroAnimation() {
       weekday: 'long', month: 'long', day: 'numeric', year: 'numeric',
     });
 
-  const scrollTo = (id) =>
+  const scrollTo = (id) => {
+    const homeEl = document.getElementById('home');
+    if (homeEl && (id === 'home' || id === 'about' || id === 'education')) {
+      const totalScrollable = homeEl.offsetHeight - window.innerHeight;
+      let targetProgress = 0;
+      if (id === 'home') targetProgress = 0;
+      else if (id === 'about') targetProgress = 0.78;
+      else if (id === 'education') targetProgress = 0.96;
+
+      const targetY = homeEl.offsetTop + targetProgress * totalScrollable;
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
+      return;
+    }
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   // ── Canvas animation state ──────────────────────────────────────────────────
   const canvasAnimRef = useRef({
@@ -122,8 +175,6 @@ export default function HeroAnimation() {
       eduPanelRef.current.style.transform = 'translateX(100%)';
       eduPanelRef.current.style.pointerEvents = 'none';
     }
-
-    let lastProgress = 0;
 
     const updateFromProgress = (rawProgress) => {
       const p = Math.min(Math.max(rawProgress, 0), 1);
@@ -197,8 +248,6 @@ export default function HeroAnimation() {
         eduPanelRef.current.style.transform = `translateX(${tx}%)`;
         eduPanelRef.current.style.pointerEvents = pe;
       }
-
-      lastProgress = p;
     };
 
     // Scroll listener to compute hero container progress
@@ -239,10 +288,11 @@ export default function HeroAnimation() {
     };
     canvasAnimRef.current.rafId = requestAnimationFrame(rafLoop);
 
+    const animState = canvasAnimRef.current;
     return () => {
       window.removeEventListener('scroll', onScrollHandler);
       window.removeEventListener('resize', onScrollHandler);
-      if (canvasAnimRef.current.rafId) cancelAnimationFrame(canvasAnimRef.current.rafId);
+      if (animState.rafId) cancelAnimationFrame(animState.rafId);
     };
   }, [isLoaded]);
 
@@ -255,6 +305,17 @@ export default function HeroAnimation() {
      *   ~70vh  for Education enter (90%→100%)
      */
     <section id="home" ref={containerRef} className="relative w-full bg-black" style={{ height: '700vh' }}>
+      {/* Invisible anchor targets positioned at exact scroll milestones for native hash links */}
+      <div
+        id="about"
+        className="absolute w-full pointer-events-none"
+        style={{ top: '66.85%', height: '1px' }}
+      />
+      <div
+        id="education"
+        className="absolute w-full pointer-events-none"
+        style={{ top: '82.28%', height: '1px' }}
+      />
 
       {/* ── Sticky fullscreen viewport ───────────────────────────────────── */}
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-black">
@@ -266,8 +327,8 @@ export default function HeroAnimation() {
         />
 
         {/* Cinematic gradient overlays */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-transparent to-black/30 pointer-events-none z-10" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/45 pointer-events-none z-10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-transparent to-black/35 pointer-events-none z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/50 pointer-events-none z-10" />
 
         {/* ── Panel: HERO OVERLAY ─────────────────────────────────────────── */}
         <div
@@ -276,16 +337,25 @@ export default function HeroAnimation() {
           style={{ willChange: 'transform, opacity', transition: 'none' }}
         >
           {/* Main Text + CTAs */}
-          <div className="my-auto max-w-2xl">
-            <h3 className="text-xl sm:text-2xl lg:text-3xl text-white/90 font-normal mb-1 tracking-wide">
-              Hey, I'm a
+          <div className="my-auto max-w-3xl">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.08] border border-white/15 backdrop-blur-md mb-5 shadow-lg">
+              <span className="w-2 h-2 rounded-full bg-[#38bdf8] shadow-[0_0_8px_#38bdf8]" />
+              <span className="text-xs font-mono text-gray-200 tracking-wider uppercase font-medium">
+                Full-Stack Developer · ML Enthusiast
+              </span>
+            </div>
+            <h3 className="text-xl sm:text-2xl lg:text-3xl text-white/90 font-light mb-2 tracking-wide">
+              Hey, I'm Saptarshi Mondal {TYPEWRITER_WORDS[wordIndex].article}
             </h3>
-            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black text-white tracking-tight leading-none drop-shadow-[0_10px_25px_rgba(0,0,0,0.9)]">
-              Creative
+            <h1
+              className={`text-5xl sm:text-7xl lg:text-8xl font-black tracking-tight leading-none mb-4 drop-shadow-[0_10px_25px_rgba(0,0,0,0.9)] min-h-[1.15em] flex items-center ${TYPEWRITER_WORDS[wordIndex].color}`}
+            >
+              <span>{displayText}</span>
+              <span className="inline-block w-[3px] sm:w-[5px] h-[0.85em] bg-current ml-2 sm:ml-3 animate-pulse rounded-full" />
             </h1>
-            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black text-[#38bdf8] tracking-tight leading-none mb-8 drop-shadow-[0_10px_25px_rgba(0,0,0,0.9)]">
-              Director
-            </h1>
+            <p className="text-base sm:text-xl text-gray-300 font-light mb-8 max-w-xl leading-relaxed">
+              B.Tech in IT (2026) · Kalyani Government Engineering College. Building full-stack systems with React, Django, Flask & Machine Learning.
+            </p>
 
             {/* CTA Buttons */}
             <div className="flex flex-wrap items-center gap-4 sm:gap-5">
@@ -302,13 +372,15 @@ export default function HeroAnimation() {
               </button>
 
               <a
-                href="#cv"
-                onClick={(e) => { e.preventDefault(); alert('CV download initiated.'); }}
+                href="/Saptarshi_Mondal_CV.pdf"
+                download="Saptarshi_Mondal_CV.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="group flex items-center gap-2.5 bg-black/60 backdrop-blur-md border border-[#38bdf8]/60 hover:border-[#38bdf8] text-white px-6 py-3 rounded-full font-medium text-sm sm:text-base shadow-[0_0_15px_rgba(56,189,248,0.2)] hover:shadow-[0_0_25px_rgba(56,189,248,0.4)] transition-all duration-300 hover:scale-[1.03] cursor-pointer"
               >
                 <span>Download CV</span>
                 <svg className="w-4 h-4 text-[#38bdf8] group-hover:translate-y-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </a>
             </div>
@@ -320,7 +392,7 @@ export default function HeroAnimation() {
             <div className="flex items-center gap-3">
               {[
                 {
-                  label: 'GitHub', href: 'https://github.com',
+                  label: 'GitHub', href: 'https://github.com/EElectriX',
                   path: 'M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z',
                 },
                 {
@@ -328,12 +400,8 @@ export default function HeroAnimation() {
                   path: 'M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451c.978 0 1.778-.773 1.778-1.729V1.73C24 .774 23.205 0 22.225 0z',
                 },
                 {
-                  label: 'Facebook', href: 'https://facebook.com',
-                  path: 'M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z',
-                },
-                {
-                  label: 'Instagram', href: 'https://instagram.com',
-                  path: 'M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z',
+                  label: 'LeetCode', href: 'https://leetcode.com/u/ElectriX/',
+                  path: 'M16.102 17.93l-2.697 2.607c-.466.467-1.111.662-1.823.662s-1.357-.195-1.824-.662l-4.332-4.363c-.467-.467-.702-1.15-.702-1.863s.235-1.357.702-1.824l4.319-4.38c.467-.467 1.125-.645 1.837-.645s1.357.195 1.823.662l2.697 2.606c.514.515 1.365.497 1.9-.038.535-.536.553-1.387.039-1.901l-2.609-2.636a5.247 5.247 0 00-3.85-1.363c-1.472 0-2.885.587-3.924 1.625l-4.32 4.381c-1.039 1.039-1.611 2.452-1.611 3.924s.572 2.885 1.611 3.924l4.332 4.363c1.039 1.039 2.452 1.625 3.924 1.625 1.472 0 2.885-.586 3.924-1.625l2.609-2.636c.514-.514.496-1.365-.039-1.901-.535-.535-1.386-.553-1.9.038zM20.811 13.01H10.666c-.744 0-1.348.604-1.348 1.348s.604 1.348 1.348 1.348h10.145c.744 0 1.348-.604 1.348-1.348s-.604-1.348-1.348-1.348z',
                 },
               ].map(({ label, href, path }) => (
                 <a

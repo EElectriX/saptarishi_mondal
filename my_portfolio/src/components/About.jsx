@@ -23,35 +23,41 @@ export function AboutContent() {
           <p className="text-xl sm:text-2xl font-light text-white leading-snug">
             I am a{' '}
             <strong className="font-semibold text-[#38bdf8]">
-              Creative Director & Visual Storyteller
+              Full-Stack Developer & ML Enthusiast
             </strong>{' '}
-            focused on cinematic imagery, commercial photography, and brand world-building.
+            pursuing B.Tech in Information Technology at Kalyani Government Engineering College.
           </p>
           <p>
-            With over a decade behind the camera and in the creative chair, I sculpt light and
-            narrative to deliver high-impact visual experiences. From concept development to the
-            final frame, my work bridges raw human emotion with striking contemporary aesthetic
-            precision.
+            I architect and engineer modern web applications, combining intuitive, responsive interfaces with resilient backend architectures. My focus spans scalable full-stack development with <strong>React.js</strong>, <strong>Django</strong>, and <strong>Flask</strong>, alongside practical integration of Machine Learning and Deep Learning models (XGBoost, CNNs) for real-world impact.
+          </p>
+          <p className="text-base text-gray-400">
+            Backed by a strong problem-solving foundation with 100+ LeetCode challenges solved, high-ranking competitive milestones (WBJEE JELET GMR 67), and proven production deployments, I build clean, high-performance software systems.
           </p>
 
           {/* Quick Stats */}
-          <div className="grid grid-cols-3 gap-6 pt-6 border-t border-white/10">
+          <div className="grid grid-cols-4 gap-4 pt-4 mt-4 border-t border-white/10">
             <div>
-              <span className="block text-3xl sm:text-4xl font-extrabold text-white">8+</span>
+              <span className="block text-3xl sm:text-4xl font-extrabold text-white">GMR 67</span>
               <span className="text-xs uppercase tracking-wider text-gray-400 font-mono">
-                Years Experience
+                WBJEE JELET Rank
               </span>
             </div>
             <div>
-              <span className="block text-3xl sm:text-4xl font-extrabold text-[#38bdf8]">120+</span>
+              <span className="block text-3xl sm:text-4xl font-extrabold text-[#38bdf8]">100+</span>
               <span className="text-xs uppercase tracking-wider text-gray-400 font-mono">
-                Projects Directed
+                LeetCode Solved
               </span>
             </div>
             <div>
-              <span className="block text-3xl sm:text-4xl font-extrabold text-white">15+</span>
+              <span className="block text-3xl sm:text-4xl font-extrabold text-white">7.61</span>
               <span className="text-xs uppercase tracking-wider text-gray-400 font-mono">
-                Awards & Honors
+                B.Tech CGPA
+              </span>
+            </div>
+            <div>
+              <span className="block text-3xl sm:text-4xl font-extrabold text-white">8.5</span>
+              <span className="text-xs uppercase tracking-wider text-gray-400 font-mono">
+                Diploma CGPA
               </span>
             </div>
           </div>
@@ -59,23 +65,30 @@ export function AboutContent() {
 
         {/* Highlights Card */}
         <div className="lg:col-span-5">
-          <div className="bg-white/[0.04] border border-white/10 rounded-2xl p-7 backdrop-blur-sm space-y-5 shadow-2xl">
+          <div className="bg-white/[0.04] border border-white/10 rounded-2xl p-7 backdrop-blur-sm space-y-4 shadow-2xl">
             <h3 className="text-xl font-bold text-white tracking-wide flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-[#38bdf8] shadow-[0_0_8px_#38bdf8]" />
-              Creative Pillars
+              Core Engineering Pillars
             </h3>
             {[
               {
-                title: 'Cinematic Visual Language',
-                desc: 'Mastery over dynamic range, color harmony, and composition engineered for lasting emotional imprint.',
+                title: 'Full-Stack Web Development',
+                desc: 'Building responsive SPAs using React & Tailwind CSS, backed by robust RESTful APIs in Django & Flask.',
               },
               {
-                title: 'End-to-End Creative Direction',
-                desc: 'Guiding lighting directors, set designers, and post-production artists into a cohesive vision.',
+                title: 'Applied AI & Machine Learning',
+                desc: 'Deploying predictive models (XGBoost) and Computer Vision architectures (CNNs) into production apps.',
               },
-
+              {
+                title: 'Databases & Secure APIs',
+                desc: 'Proficient in PostgreSQL, MySQL, SQLite schema design, seamless data migrations, and JWT authentication.',
+              },
+              {
+                title: 'Algorithmic Problem Solving',
+                desc: 'Strong foundation in core data structures, algorithms, and computational efficiency.',
+              },
             ].map((p, i) => (
-              <div key={i} className="p-4 rounded-xl bg-white/[0.02] border border-white/5">
+              <div key={i} className="p-3.5 rounded-xl bg-white/[0.02] border border-white/5">
                 <h4 className="font-semibold text-white text-base">{p.title}</h4>
                 <p className="text-sm text-gray-400 mt-1">{p.desc}</p>
               </div>

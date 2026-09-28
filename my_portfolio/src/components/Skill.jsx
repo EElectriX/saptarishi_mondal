@@ -4,61 +4,140 @@ export default function Skill() {
   const [activeCategory, setActiveCategory] = useState('all');
 
   const skillsData = [
+    // Languages
     {
-      name: 'Art Direction',
-      category: 'direction',
+      name: 'Python',
+      category: 'languages',
+      level: '92%',
+      description: 'Core backend, scripting, ML model development with NumPy, Pandas, Scikit-Learn, and Deep Learning.',
+      icon: '🐍',
+    },
+    {
+      name: 'JavaScript (ES6+)',
+      category: 'languages',
+      level: '90%',
+      description: 'Modern asynchronous programming, DOM manipulation, functional programming, and web APIs.',
+      icon: '⚡',
+    },
+    {
+      name: 'SQL',
+      category: 'languages',
+      level: '88%',
+      description: 'Complex queries, schema normalization, indexing, joins, aggregations, and performance tuning.',
+      icon: '🗄️',
+    },
+    {
+      name: 'Java',
+      category: 'languages',
+      level: '80%',
+      description: 'Object-oriented programming, data structures, and foundational algorithms.',
+      icon: '☕',
+    },
+
+    // Frontend
+    {
+      name: 'React.js & Vite',
+      category: 'frontend',
+      level: '94%',
+      description: 'Component architecture, custom hooks, dynamic rendering, and ultra-fast Vite tooling.',
+      icon: '⚛️',
+    },
+    {
+      name: 'Tailwind CSS',
+      category: 'frontend',
       level: '95%',
-      description: 'Conceptualizing aesthetic themes, mood boards, set design, and overseeing visual coherence across campaigns.',
+      description: 'Utility-first modern responsive interfaces, custom design tokens, dark mode, and sleek aesthetics.',
       icon: '🎨',
     },
     {
-      name: 'Visual Storytelling',
-      category: 'direction',
-      level: '98%',
-      description: 'Transforming narrative scripts and brand philosophies into compelling pictorial sequences and emotional beats.',
-      icon: '📖',
+      name: 'State Management (Redux & Context)',
+      category: 'frontend',
+      level: '88%',
+      description: 'Global state flow, Context API for localization/multilingual state, and predictable stores.',
+      icon: '🔄',
     },
     {
-      name: 'Cinematography',
-      category: 'camera',
-      level: '92%',
-      description: 'Mastery over camera motion, focal lengths, framing composition, and high-speed motion capture.',
-      icon: '🎥',
-    },
-    {
-      name: 'Color Grading',
-      category: 'post',
-      level: '94%',
-      description: 'Custom LUT creation, ACES color management, and cinematic tone curve manipulation in DaVinci Resolve.',
-      icon: '🌈',
-    },
-    {
-      name: 'Lighting Design',
-      category: 'camera',
+      name: 'HTML5 & Modern CSS3',
+      category: 'frontend',
       level: '96%',
-      description: 'Shaping dramatic chiaroscuro, rim lights, practicals, soft bounce keys, and LED volume environments.',
-      icon: '💡',
+      description: 'Semantic markup, accessibility (a11y), responsive layouts (Flexbox & CSS Grid), and smooth keyframes.',
+      icon: '🌐',
     },
+
+    // Backend & APIs
     {
-      name: 'Photo Editing & Retouching',
-      category: 'post',
-      level: '97%',
-      description: 'High-end frequency separation, composite manipulation, dodge & burn, and fine-art print prep.',
-      icon: '✨',
-    },
-    {
-      name: 'Set & Location Scouting',
-      category: 'direction',
+      name: 'Django & Django REST Framework',
+      category: 'backend',
       level: '90%',
-      description: 'Architectural alignment, golden hour angle mapping, and spatial coordination for complex shoots.',
-      icon: '📍',
+      description: 'Scalable MVC architectures, ORM modeling, serializers, viewsets, and secure endpoint design.',
+      icon: '🎸',
     },
     {
-      name: 'Creative Team Leadership',
-      category: 'direction',
+      name: 'Flask',
+      category: 'backend',
+      level: '88%',
+      description: 'Lightweight microservices, ML model inference APIs, and flexible RESTful routing.',
+      icon: '🧪',
+    },
+    {
+      name: 'RESTful APIs & JWT Auth',
+      category: 'backend',
+      level: '92%',
+      description: 'Token-based authentication, request validation, CORS management, and robust error handling.',
+      icon: '🔐',
+    },
+
+    // Databases & ML
+    {
+      name: 'PostgreSQL & MySQL',
+      category: 'data_ml',
+      level: '88%',
+      description: 'Production relational databases, ACID transactions, migrations, and cloud hosting integration.',
+      icon: '🐘',
+    },
+    {
+      name: 'Machine Learning (XGBoost & CNN)',
+      category: 'data_ml',
+      level: '85%',
+      description: 'Tabular prediction with XGBoost and image-based Computer Vision diagnosis using Convolutional Neural Networks.',
+      icon: '🤖',
+    },
+    {
+      name: 'SQLite & Oracle SQL',
+      category: 'data_ml',
+      level: '86%',
+      description: 'Lightweight development databases and enterprise database querying and relational management.',
+      icon: '📊',
+    },
+
+    // Tools & Deployment
+    {
+      name: 'Git & GitHub',
+      category: 'tools',
       level: '94%',
-      description: 'Mentoring talent, harmonizing wardrobe, HMUA, sound, and lighting departments on set.',
-      icon: '👥',
+      description: 'Version control, multi-branch workflows, collaborative code reviews, and open-source management.',
+      icon: '🐙',
+    },
+    {
+      name: 'Postman & API Testing',
+      category: 'tools',
+      level: '90%',
+      description: 'Endpoint testing, mock servers, automated environment variable switching, and payload debugging.',
+      icon: '📬',
+    },
+    {
+      name: 'Render & Cloud Deployment',
+      category: 'tools',
+      level: '88%',
+      description: 'Full-stack production deployment, environment variables, live build pipelines, and production databases.',
+      icon: '🚀',
+    },
+    {
+      name: 'Jupyter & Google Colab',
+      category: 'tools',
+      level: '90%',
+      description: 'Exploratory data analysis, interactive model prototyping, GPU training, and visualization.',
+      icon: '📓',
     },
   ];
 
@@ -73,20 +152,22 @@ export default function Skill() {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div>
             <span className="text-xs font-mono uppercase tracking-[0.25em] text-[#38bdf8] block mb-2">
-              03. Expertise
+              03. Technical Stack
             </span>
             <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white">
-              Skills & <span className="text-[#38bdf8]">Craft</span>
+              Skills & <span className="text-[#38bdf8]">Expertise</span>
             </h2>
           </div>
 
           {/* Filter Badges */}
           <div className="flex flex-wrap gap-2">
             {[
-              { id: 'all', label: 'All Disciplines' },
-              { id: 'direction', label: 'Direction & Narrative' },
-              { id: 'camera', label: 'Camera & Lighting' },
-              { id: 'post', label: 'Post-Production' },
+              { id: 'all', label: 'All Tech' },
+              { id: 'languages', label: 'Languages' },
+              { id: 'frontend', label: 'Frontend' },
+              { id: 'backend', label: 'Backend & APIs' },
+              { id: 'data_ml', label: 'Databases & ML' },
+              { id: 'tools', label: 'Tools & DevOps' },
             ].map((cat) => (
               <button
                 key={cat.id}

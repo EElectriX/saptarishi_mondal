@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react";
 
 export default function KolkataWeather() {
-  const [weather, setWeather] = useState(null);
-  const [loading, setLoading] = useState(true);
-
   const apiKey = import.meta.env.VITE_WEATHER_API_KEY;
+  const [weather, setWeather] = useState(null);
+  const [loading, setLoading] = useState(() => Boolean(apiKey));
 
   useEffect(() => {
     if (!apiKey) {
-      console.warn("VITE_WEATHER_API_KEY is not defined in .env");
-      setLoading(false);
       return;
     }
 
